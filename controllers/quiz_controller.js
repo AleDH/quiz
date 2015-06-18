@@ -15,7 +15,10 @@ exports.load = function(req,res,next,quizId){
 
 // GET /quizes
 exports.index = function(req,res){
-	models.Quiz.findAll().then(
+	var busqueda="";
+	if (req.query.search) busqueda = req.query.search.replace(" ","%").toUpperCase();
+	busqueda="%" + busqueda + "%";
+	models.Quiz.findAll({where: ["pregunta like upper(?)",busqueda]}).then(
 	function(quizes){
 		res.render('quizes/index.ejs',{quizes:quizes});
 	}
