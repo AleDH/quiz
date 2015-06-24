@@ -42,6 +42,29 @@ app.use(function(req,res,next){
 	
 });
 
+app.use(function(req,res,next){
+	
+	if (req.session.user) {
+
+	console.log("comprobando sesion");
+		console.log("Ahora: " + Date.now());
+		console.log("req.session.user.time: " + req.session.user.time);
+		console.log("diferencia: " + (Date.now()-req.session.user.time));
+		if ((Date.now()-req.session.user.time)>120000)
+			{
+				console.log("ha pasado el tiempo");
+				req.session.user=null;
+			}else
+			{
+				req.session.user.time=Date.now();
+			}
+		
+	}
+	
+	next();
+	
+});
+
 
 app.use('/', routes);
 
